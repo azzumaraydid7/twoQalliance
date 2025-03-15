@@ -6,6 +6,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
 
 defineProps({
     canResetPassword: {
@@ -17,6 +19,7 @@ defineProps({
 });
 
 const form = useForm({
+    user_type: 'user',
     email: '',
     password: '',
     remember: false,
@@ -24,7 +27,7 @@ const form = useForm({
 
 const submit = () => {
     form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+        // onFinish: () => form.reset('password'),
     });
 };
 </script>
@@ -38,6 +41,12 @@ const submit = () => {
         </div>
 
         <form @submit.prevent="submit">
+            <div>
+                <select v-model="form.user_type" required class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mt-1 block w-full mb-4">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
             <div>
                 <InputLabel for="email" value="Email" />
 
