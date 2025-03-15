@@ -37,6 +37,10 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
+        if(Auth::guard('admin')->check()) {
+            return Redirect::route('profile.admin.edit');
+        }
+        
         return Redirect::route('profile.edit');
     }
 

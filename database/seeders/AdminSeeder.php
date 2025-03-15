@@ -16,12 +16,12 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin_exists = Admin::where('name','admin')->where('email','admin@example.com')->exists();
+        $admin_exists = Admin::where('name','admin')->where('email','admin@admin.com')->exists();
         
         if(!$admin_exists) {
             $admin = Admin::create([
                 'name' => 'admin',
-                'email' => 'admin@example.com',
+                'email' => 'admin@admin.com',
                 'password' => static::$password ??= Hash::make('password'),
                 'remember_token' => Str::random(10)
             ]);

@@ -13,6 +13,12 @@ defineProps({
     dashboard: {
         type: String,
     },
+    profile: {
+        type: String,
+    },
+    company: {
+        type: String,
+    },
     logout: {
         type: String,
     },
@@ -44,7 +50,7 @@ defineProps({
                             >
                                 <NavLink
                                     :href="dashboard"
-                                    :active="route().current('admin.dashboard')"
+                                    :active="route().current('dashboard')"
                                 >
                                     Dashboard
                                 </NavLink>
@@ -81,9 +87,14 @@ defineProps({
 
                                     <template #content>
                                         <DropdownLink
-                                            :href="route('profile.edit')"
+                                            :href="profile"
                                         >
                                             Profile
+                                        </DropdownLink>
+                                        <DropdownLink
+                                            :href="company"
+                                        >
+                                            Company
                                         </DropdownLink>
                                         <DropdownLink
                                             :href="logout"
@@ -173,8 +184,11 @@ defineProps({
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')">
+                            <ResponsiveNavLink :href="profile">
                                 Profile
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="company">
+                                Company
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 :href="logout"

@@ -7,6 +7,8 @@ const page = usePage();
 const guard = page.props.auth.guard;
 
 const homepage = (guard == 'admin') ? route('admin.dashboard') : route('dashboard');
+const profileLink = (guard == 'admin') ? route('profile.admin.edit') : route('profile.edit');
+const companyLink = (guard == 'admin') ? route('company.admin.index') : route('company.index');
 const logoutLink = (guard == 'admin') ? route('admin.logout') : route('logout');
 
 </script>
@@ -14,7 +16,7 @@ const logoutLink = (guard == 'admin') ? route('admin.logout') : route('logout');
 <template>
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout :dashboard="homepage" :logout="logoutLink">
+    <AuthenticatedLayout :dashboard="homepage" :profile="profileLink" :company="companyLink" :logout="logoutLink">
         <template #header>
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"

@@ -5,13 +5,19 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+const guard = page.props.auth.guard;
+
+const confirm = (guard == 'admin') ? route('password.admin.confirm') : route('password.confirm');
 
 const form = useForm({
     password: '',
 });
 
 const submit = () => {
-    form.post(route('password.confirm'), {
+    form.post(confirm, {
         onFinish: () => form.reset(),
     });
 };
