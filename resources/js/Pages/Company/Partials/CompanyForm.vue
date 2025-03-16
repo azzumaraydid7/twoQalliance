@@ -9,19 +9,13 @@ import { usePage } from '@inertiajs/vue3';
 
 const page = usePage();
 const guard = page.props.auth.guard;
+const company = page.props.company
 
 const currentNameInput = ref(null);
 const currentEmailInput = ref(null);
-const currentLogoInput = ref(null);
 const currentWebsiteLinkInput = ref(null);
-
-const company = page.props.company
-
-if(company) {
-    var url = (guard == 'admin') ? route('company.admin.update', { 'id': company?.id}) : route('company.update', { 'id': company?.id});
-} else {
-    var url = (guard == 'admin') ? route('company.admin.store') : route('company.store');
-}
+const currentLogoInput = ref(null);
+const urlFile = ref(company?.logo ?? null);
 
 const form = useForm({
     name: company?.name ?? '',
@@ -30,30 +24,23 @@ const form = useForm({
     website_link: company?.website_link ?? '',
 });
 
+const previewImage = (e) => {
+    form.logo = e.target.files[0];
+    urlFile.value = URL.createObjectURL(form.logo);
+};
+
+if(company) {
+    var id = company.id
+    var url = (guard == 'admin') ? route('company.admin.update', { 'id': id }) : route('company.update', { 'id': id });
+} else {
+    var url = (guard == 'admin') ? route('company.admin.store') : route('company.store');
+}
+
 const createOrUpdateCompany = () => {
-    if(company) {
-        form.patch(url, {
-            preserveScroll: true,
-            // onSuccess: () => form.reset(),
-            // onError: () => {
-            //     if (form.errors.name) {
-            //         form.reset('name', 'email', 'logo', 'website_link');
-            //         passwordInput.value.focus();
-            //     }
-            // },
-        });
-    } else {
-        form.post(url, {
-            preserveScroll: true,
-            // onSuccess: () => form.reset(),
-            // onError: () => {
-            //     if (form.errors.name) {
-            //         form.reset('name', 'email', 'logo', 'website_link');
-            //         passwordInput.value.focus();
-            //     }
-            // },
-        });
-    }
+    form.post(url, {
+        forceFormData: true,
+        preserveScroll: true,
+    });
 };
 
 defineProps({
@@ -75,91 +62,97 @@ defineProps({
             </p>
         </header>
 
-        <form @submit.prevent="createOrUpdateCompany" class="mt-6 space-y-6">
-            <div>
-                <InputLabel for="name" value="Company Name" />
-
-                <TextInput
-                    id="name"
-                    ref="currentNameInput"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                />
-
-                <InputError
-                    :message="form.errors.name"
-                    class="mt-2"
-                />
-            </div>
-
-            <div>
-                <InputLabel for="email" value="Company Email" />
-
-                <TextInput
-                    id="email"
-                    ref="currentEmailInput"
-                    v-model="form.email"
-                    type="text"
-                    class="mt-1 block w-full"
-                />
-
-                <InputError
-                    :message="form.errors.email"
-                    class="mt-2"
-                />
-            </div>
-
-            <div>
-                <InputLabel for="logo" value="Company Logo" />
-
-                <TextInput
-                    id="logo"
-                    ref="currentLogoInput"
-                    v-model="form.logo"
-                    type="text"
-                    class="mt-1 block w-full"
-                />
-
-                <InputError
-                    :message="form.errors.logo"
-                    class="mt-2"
-                />
-            </div>
-
-            <div>
-                <InputLabel for="website_link" value="Company Website" />
-
-                <TextInput
-                    id="website_link"
-                    ref="currentWebsiteLinkInput"
-                    v-model="form.website_link"
-                    type="text"
-                    class="mt-1 block w-full"
-                />
-
-                <InputError
-                    :message="form.errors.website_link"
-                    class="mt-2"
-                />
-            </div>
-
-            <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">{{ title }}</PrimaryButton>
-
-                <Transition
-                    enter-active-class="transition ease-in-out"
-                    enter-from-class="opacity-0"
-                    leave-active-class="transition ease-in-out"
-                    leave-to-class="opacity-0"
-                >
-                    <p
-                        v-if="form.recentlySuccessful"
-                        class="text-sm text-gray-600"
+        <form @submit.prevent="createOrUpdateCompany" class="flex space-x-4 w-full">
+            <div class="mt-6 space-y-6 w-full">
+                <div>
+                    <InputLabel for="name" value="Company Name" />
+    
+                    <TextInput
+                        id="name"
+                        ref="currentNameInput"
+                        v-model="form.name"
+                        type="text"
+                        class="mt-1 block w-full"
+                    />
+    
+                    <InputError
+                        :message="form.errors.name"
+                        class="mt-2"
+                    />
+                </div>
+    
+                <div>
+                    <InputLabel for="email" value="Company Email" />
+    
+                    <TextInput
+                        id="email"
+                        ref="currentEmailInput"
+                        v-model="form.email"
+                        type="text"
+                        class="mt-1 block w-full"
+                    />
+    
+                    <InputError
+                        :message="form.errors.email"
+                        class="mt-2"
+                    />
+                </div>
+    
+                <div>
+                    <InputLabel for="logo" value="Company Logo" />
+    
+                    <input
+                        id="logo"
+                        name="logo"
+                        type="file"
+                        @change="previewImage"
+                        ref="currentLogoInput"
+                        class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mt-1 block w-full"
+                    />
+    
+                    <InputError
+                        :message="form.errors.logo"
+                        class="mt-2"
+                    />
+                </div>
+    
+                <div>
+                    <InputLabel for="website_link" value="Company Website" />
+    
+                    <TextInput
+                        id="website_link"
+                        ref="currentWebsiteLinkInput"
+                        v-model="form.website_link"
+                        type="text"
+                        class="mt-1 block w-full"
+                    />
+    
+                    <InputError
+                        :message="form.errors.website_link"
+                        class="mt-2"
+                    />
+                </div>
+    
+                <div class="flex items-center gap-4">
+                    <PrimaryButton :disabled="form.processing">{{ title }}</PrimaryButton>
+    
+                    <Transition
+                        enter-active-class="transition ease-in-out"
+                        enter-from-class="opacity-0"
+                        leave-active-class="transition ease-in-out"
+                        leave-to-class="opacity-0"
                     >
-                        Saved.
-                    </p>
-                </Transition>
+                        <p
+                            v-if="form.recentlySuccessful"
+                            class="text-sm text-gray-600"
+                        >
+                            Saved.
+                        </p>
+                    </Transition>
+                </div>
+            </div>
+            <div id="preview" class="border rounded mt-4 w-full max-h-96 ">
+                <img v-if="urlFile" :src="urlFile" class="object-cover w-full h-full rounded"/>
             </div>
         </form>
     </section>

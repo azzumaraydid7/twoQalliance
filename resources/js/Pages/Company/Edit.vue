@@ -31,7 +31,7 @@ const logoutLink = (guard == 'admin') ? route('admin.logout') : route('logout');
                 <div
                     class="bg-white p-4 shadow sm:rounded-lg sm:p-8"
                 >
-                    <CompanyForm class="max-w-xl" :title="'Edit'"/>
+                    <CompanyForm :title="'Edit'"/>
                 </div>
 
             </div>

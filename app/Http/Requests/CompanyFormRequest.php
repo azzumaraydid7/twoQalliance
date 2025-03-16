@@ -23,9 +23,9 @@ class CompanyFormRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'email' => ['required', 'string', 'email'],
-            'logo' => ['required', 'string'],
-            'website_link' => ['required', 'string'],
+            'email' => ['required', 'string', 'email', 'unique:companies,email'],
+            'logo' => ['required', 'image', 'mimes:jpeg,jpg,png'],
+            'website_link' => ['required', 'string', 'unique:companies,website_link'],
         ];
     }
 }

@@ -1,8 +1,10 @@
 <script setup>
+import DangerButton from '@/Components/DangerButton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import NavLink from '@/Components/NavLink.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const page = usePage();
@@ -16,6 +18,17 @@ const logoutLink = (guard == 'admin') ? route('admin.logout') : route('logout');
 const companyCreate = (guard == 'admin') ? route('company.admin.create') : route('company.create');
 
 const companies = ref(page.props.companies)
+
+const form = useForm({
+    id: '',
+});
+
+const deleteCompany = (id) => {
+    form.post((guard == 'admin') ? route('company.admin.delete', { 'id': id }) : route('company.delete', { 'id': id }), {
+        preserveScroll: true,
+        onSuccess: (response) => companies.value = response.props.companies,
+    });
+};
 
 </script>
 
@@ -80,6 +93,14 @@ const companies = ref(page.props.companies)
                                         >
                                             Edit
                                         </NavLink>
+                                        <DangerButton
+                                            class="ms-3"
+                                            :class="{ 'opacity-25': form.processing }"
+                                            :disabled="form.processing"
+                                            @click="deleteCompany(company.id)"
+                                        >
+                                            Delete
+                                        </DangerButton>
                                     </td>
                                 </tr>
                             </tbody>

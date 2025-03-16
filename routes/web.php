@@ -24,11 +24,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/company-create', [CompanyController::class, 'create'])->name('company.create');
     Route::post('/company-store', [CompanyController::class, 'store'])->name('company.store');
     Route::get('/company-edit/{id}', [CompanyController::class, 'edit'])->name('company.edit');
-    Route::patch('/company-update/{id}', [CompanyController::class, 'update'])->name('company.update');
+    Route::post('/company-update/{id}', [CompanyController::class, 'update'])->name('company.update');
+    Route::post('/company-delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete');
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 Route::get('/admin_dashboard', function () {
@@ -40,11 +41,12 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/company-create-admin', [CompanyController::class, 'create'])->name('company.admin.create');
     Route::post('/company-store-admin', [CompanyController::class, 'store'])->name('company.admin.store');
     Route::get('/company-edit-admin/{id}', [CompanyController::class, 'edit'])->name('company.admin.edit');
-    Route::patch('/company-update-admin/{id}', [CompanyController::class, 'update'])->name('company.admin.update');
+    Route::post('/company-update-admin/{id}', [CompanyController::class, 'update'])->name('company.admin.update');
+    Route::post('/company-delete-admin/{id}', [CompanyController::class, 'destroy'])->name('company.admin.delete');
 
     Route::get('/profile-admin', [ProfileController::class, 'edit'])->name('profile.admin.edit');
     Route::patch('/profile-admin', [ProfileController::class, 'update'])->name('profile.admin.update');
-    Route::delete('/profile-admin', [ProfileController::class, 'destroy'])->name('profile.admin.destroy');
+    Route::post('/profile-admin', [ProfileController::class, 'destroy'])->name('profile.admin.destroy');
 });
 
 require __DIR__.'/auth.php';
